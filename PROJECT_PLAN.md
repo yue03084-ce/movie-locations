@@ -59,20 +59,20 @@
 > **MVP 目标 = 完成到第 5 步，时间盒 2–3 周。** 步骤 1–6 是脚手架，快速通过；真正花时间的是第 7、8 步。
 > **步骤 0 之后所有工作都在 Git 上进行，commit 历史本身就是面试材料。**
 
-### 步骤 0 — Git 仓库 + README 骨架  `[ ]`（第 1 天）
+### 步骤 0 — Git 仓库 + README 骨架  `[x]`（第 1 天）
 - **要实现的东西**：GitHub 仓库，README 含一句话简介和架构草图（手画拍照也行）。
 - **完成 Milestone**：仓库建好，第一个 commit 推上去。
-- **备注**：______
+- **备注**：已完成。仓库 `yue03084-ce/movie-locations`（Public），push 用 Personal Access Token 认证（GitHub 不支持账户密码）。README 已写简介 + 目标架构；架构草图待补。`.gitignore` 补了 `.DS_Store`。
 
-### 步骤 1 — 装好开发环境  `[ ]`（第 1 天）
+### 步骤 1 — 装好开发环境  `[x]`（第 1 天）
 - **技术细节**：安装 JDK（Java 17+）、IntelliJ IDEA。确认 `java -version` 正常。
 - **完成 Milestone**：IDE 里新建项目并成功运行 "Hello World"。
-- **备注**：______
+- **备注**：已完成。本地 JDK 23（≥17 满足）、IntelliJ IDEA 就绪。
 
-### 步骤 2 — 建 Spring Boot 空项目  `[ ]`（第 1–2 天）
+### 步骤 2 — 建 Spring Boot 空项目  `[x]`（第 1–2 天）
 - **技术细节**：[Spring Initializr](https://start.spring.io) 生成项目，勾选 `Spring Web`。
 - **完成 Milestone**：启动后浏览器访问 `http://localhost:8080` 有响应。
-- **备注**：______
+- **备注**：已完成。Maven + Java 17 + Jar + Spring Boot 3.5.16，依赖仅 Spring Web，包名 `com.example.movielocations`。启动成功（Tomcat on 8080，`Started ... in 0.6s`）。
 
 ### 步骤 3 — 写第一个 API，返回假数据  `[ ]`（第 1 周内）
 - **技术细节**：`@RestController`，暴露 `GET /api/locations?movie=xxx`，返回手写 JSON（2~3 个取景地，含 name / lat / lng）。**同时写第一个单元测试**（MockMvc 测该接口），养成习惯。

@@ -9,7 +9,7 @@ and route optimization.
 
 ## Architecture
 Frontend (Leaflet map) → Spring Boot REST API → PostgreSQL
-+ async extraction & validation pipeline. (架构草图待补)
++ async extraction & validation pipeline. 
 
 ## Status
 MVP in progress — see PROJECT_PLAN.md
