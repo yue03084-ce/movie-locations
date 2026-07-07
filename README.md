@@ -1,8 +1,11 @@
 # Movie Filming Locations
 
-A Spring Boot web app that maps verified filming locations of movies,
-with an async LLM extraction pipeline (cross-validated against Wikidata
-and OSM geocoding) and constrained TSP itinerary optimization.
+Maps verified filming locations of movies with an LLM extraction pipeline
+and route optimization.
+
+> Target architecture below; currently building the MVP (map + REST API).
+> Full pipeline: async LLM extraction cross-validated against Wikidata and
+> OSM geocoding, plus constrained TSP itinerary optimization.
 
 ## Architecture
 Frontend (Leaflet map) → Spring Boot REST API → PostgreSQL
