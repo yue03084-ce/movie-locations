@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **进行到**：步骤 3（写第一个 API，返回假数据）—— 尚未开始写代码
-- **已完成**：步骤 0（Git/GitHub）、步骤 1（环境）、步骤 2（Spring Boot 空项目）
+- **进行到**：步骤 4（最简前端地图页 Leaflet）—— 尚未开始
+- **已完成**：步骤 0（Git/GitHub）、步骤 1（环境）、步骤 2（Spring Boot 空项目）、步骤 3（第一个 API + MockMvc 测试）
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,10 +31,8 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 3：写 `LocationController`（`@RestController` + `GET /api/locations?movie=xxx`，返回写死 JSON）
-- [ ] 步骤 3：写第一个单元测试（MockMvc 测该接口），跑通 `mvn test`
+- [ ] 步骤 4：单 HTML 文件 + Leaflet，手写假坐标打 2 个 marker（不连后端）
 - [ ] README 里的架构草图待补（手画拍照即可）
-- [ ] PROJECT_PLAN.md 里步骤 0/1/2 的状态标记可更新为 `[x]`
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
 
 ---
@@ -53,7 +51,10 @@
 | `.gitignore` | 忽略 target/、.idea、.DS_Store 等 |
 | `mvnw` / `mvnw.cmd` / `.mvn/` | Maven wrapper（无需改动） |
 
-**尚未创建**：`LocationController.java`（步骤 3 要建）、前端 HTML（步骤 4）。
+| `src/main/java/.../LocationController.java` | 第一个 API：`GET /api/locations?movie=xxx`，record DTO，返回写死数据 |
+| `src/test/java/.../LocationControllerTest.java` | MockMvc 单元测试（`@WebMvcTest`） |
+
+**尚未创建**：前端 HTML（步骤 4）。
 
 ---
 
@@ -65,3 +66,10 @@
 - 补 README、`.gitignore` 加 `.DS_Store`。
 - 修订了 PROJECT_PLAN.md（加入 Git、单元测试、Wikidata 验证、异步管线、TSP、CI/CD 等）。
 - **下一步**：步骤 3，手敲 `LocationController`。
+
+### 2026-07-08（第 2 天）
+- 完成步骤 3（本人手敲，Claude 讲概念）：`LocationController`（record DTO + `@RequestParam`）+ `LocationControllerTest`（`@WebMvcTest` + MockMvc），测试通过（349ms）。
+- 概念课：客户端/服务器模型、Spring 路由（`@RestController`/`@GetMapping`）、对象→JSON 自动序列化（Jackson）、依赖注入（`@Autowired`）、HTTP 状态码、`@WebMvcTest` vs `@SpringBootTest`。
+- 踩坑：`jsonPath` 误导入 `MockRestRequestMatchers` 导致需要强转 → 换成 `MockMvcResultMatchers` 后解决。经验：断言需要强转 ≈ import 错了。
+- Mockito/JDK23 动态 agent 警告确认无害。
+- **下一步**：步骤 4，单 HTML + Leaflet 地图打 2 个假 marker。

@@ -74,10 +74,10 @@
 - **完成 Milestone**：启动后浏览器访问 `http://localhost:8080` 有响应。
 - **备注**：已完成。Maven + Java 17 + Jar + Spring Boot 3.5.16，依赖仅 Spring Web，包名 `com.example.movielocations`。启动成功（Tomcat on 8080，`Started ... in 0.6s`）。
 
-### 步骤 3 — 写第一个 API，返回假数据  `[ ]`（第 1 周内）
+### 步骤 3 — 写第一个 API，返回假数据  `[x]`（第 1 周内）
 - **技术细节**：`@RestController`，暴露 `GET /api/locations?movie=xxx`，返回手写 JSON（2~3 个取景地，含 name / lat / lng）。**同时写第一个单元测试**（MockMvc 测该接口），养成习惯。
 - **完成 Milestone**：Postman 能看到 JSON；`mvn test` 通过。
-- **备注**：______
+- **备注**：已完成（2026-07-08，本人手敲）。`LocationController` 用 record 定义 `Location(name, lat, lng)` DTO，`@RequestParam String movie` 接参（默认必填，缺参返回 400）。测试 `LocationControllerTest` 用 `@WebMvcTest` + MockMvc，断言 200 + jsonPath。踩坑：`jsonPath` 曾误导入 `MockRestRequestMatchers`（应为 `MockMvcResultMatchers`），需强转即是 import 错误的信号。Mockito/JDK23 动态 agent 警告无害，忽略。
 
 ### 步骤 4 — 最简前端地图页  `[ ]`（第 1–2 周）
 - **技术细节**：单 HTML 文件，引入 Leaflet，手写假坐标打 2 个 marker。此步不连后端。
