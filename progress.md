@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **进行到**：步骤 4（最简前端地图页 Leaflet）—— 尚未开始
-- **已完成**：步骤 0（Git/GitHub）、步骤 1（环境）、步骤 2（Spring Boot 空项目）、步骤 3（第一个 API + MockMvc 测试）
+- **进行到**：步骤 5（前后端连通，★ MVP 里程碑）—— 尚未开始
+- **已完成**：步骤 0（Git/GitHub）、步骤 1（环境）、步骤 2（Spring Boot 空项目）、步骤 3（第一个 API + MockMvc 测试）、步骤 4（Leaflet 地图页）
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,7 +31,7 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 4：单 HTML 文件 + Leaflet，手写假坐标打 2 个 marker（不连后端）
+- [ ] 步骤 5：前端 `fetch('/api/locations?movie=xxx')`，循环生成 marker；CORS 按环境精确配置（不用 `@CrossOrigin("*")`）
 - [ ] README 里的架构草图待补（手画拍照即可）
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
 
@@ -53,8 +53,7 @@
 
 | `src/main/java/.../LocationController.java` | 第一个 API：`GET /api/locations?movie=xxx`，record DTO，返回写死数据 |
 | `src/test/java/.../LocationControllerTest.java` | MockMvc 单元测试（`@WebMvcTest`） |
-
-**尚未创建**：前端 HTML（步骤 4）。
+| `src/main/resources/static/index.html` | 前端地图页：Leaflet + OSM，2 个假 marker（步骤 5 将改为 fetch 后端） |
 
 ---
 
@@ -73,3 +72,11 @@
 - 踩坑：`jsonPath` 误导入 `MockRestRequestMatchers` 导致需要强转 → 换成 `MockMvcResultMatchers` 后解决。经验：断言需要强转 ≈ import 错了。
 - Mockito/JDK23 动态 agent 警告确认无害。
 - **下一步**：步骤 4，单 HTML + Leaflet 地图打 2 个假 marker。
+
+### 2026-07-11（第 3 天）
+- 完成步骤 4（本人手敲）：`static/index.html`，Leaflet 地图 + OSM 底图 + 2 个 marker（东京柏悦酒店、涩谷十字路口），点击弹出名字。
+- 概念课：客户端渲染三件套（HTML 结构 / CSS 外观 / JS 行为）、CDN 引库 ≈ Maven 引依赖、CSS 放 head JS 放 body 末尾的原因、Leaflet 三句核心 API。
+- 踩坑：HTML/CSS 里误用 `//` 注释（三种语言注释语法不同）；社区版 IDEA 不支持 JS 高亮导致错误难发现。
+- IDE 升级：申请 JetBrains Educational Pack（免费，至 2027-07），换用 IntelliJ IDEA Ultimate。
+- 补基础方向确定：计算机网络只补应用层子集（HTTP → URL/端口 → DNS → TCP/UDP → HTTPS），资源《图解 HTTP》+ MDN。
+- **下一步**：步骤 5（★ MVP 里程碑），前端 fetch 后端 API、循环打点，处理 CORS。

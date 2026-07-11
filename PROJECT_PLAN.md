@@ -79,10 +79,10 @@
 - **完成 Milestone**：Postman 能看到 JSON；`mvn test` 通过。
 - **备注**：已完成（2026-07-08，本人手敲）。`LocationController` 用 record 定义 `Location(name, lat, lng)` DTO，`@RequestParam String movie` 接参（默认必填，缺参返回 400）。测试 `LocationControllerTest` 用 `@WebMvcTest` + MockMvc，断言 200 + jsonPath。踩坑：`jsonPath` 曾误导入 `MockRestRequestMatchers`（应为 `MockMvcResultMatchers`），需强转即是 import 错误的信号。Mockito/JDK23 动态 agent 警告无害，忽略。
 
-### 步骤 4 — 最简前端地图页  `[ ]`（第 1–2 周）
+### 步骤 4 — 最简前端地图页  `[x]`（第 1–2 周）
 - **技术细节**：单 HTML 文件，引入 Leaflet，手写假坐标打 2 个 marker。此步不连后端。
 - **完成 Milestone**：地图上有 2 个图钉，点击弹出名字。
-- **备注**：______
+- **备注**：已完成（2026-07-11，本人手敲）。文件放 `src/main/resources/static/index.html`（Spring Boot 自动服务 static/，为步骤 5 铺路）。Leaflet 1.9.4 via unpkg CDN + OSM 底图。踩坑：HTML/CSS 里误用 `//` 注释（HTML 用 `<!-- -->`，CSS 用 `/* */`）；`#map` 必须显式设高度否则地图不显示。IDE 升级为 IntelliJ IDEA Ultimate（学生 Educational Pack 免费，有效期至 2027-07），获得 JS/CSS 高亮与补全。
 
 ### 步骤 5 — 前后端连通（★ MVP 里程碑）  `[ ]`（第 2–3 周）
 - **技术细节**：前端 `fetch` 步骤 3 的 API，循环生成 marker。CORS 用配置类按环境精确放行前端 origin，**不用 `@CrossOrigin("*")` 糊过去**（面试可能问为什么）。

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Movie Locations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"> <!--css  Leaflet 的样式文件（管外观：控件、弹窗样式等）-->
+    <style>
+        #map { height: 100vh; }   /* 地图占满整个窗口高度， 自己写的 #map 高度（管容器大小）*/
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script> <!--js 管怎么做 -->
+    <script>
+        // 1. 初始化地图，视野中心用东京 [35.68, 139.75]，缩放 12
+        const map = L.map('map').setView([35.68, 139.75], 12);
+
+        // 2. 加底图：
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        // 3. 打 2 个 marker，用你 Controller 里那两个取景地的坐标，bindPopup 名字
+        L.marker([35.6852, 139.6900]).addTo(map).bindPopup('东京柏悦酒店');
+        L.marker([35.6895, 139.7004]).addTo(map).bindPopup('涩谷十字路口');
+    </script>
+</body>
+</html>
