@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **进行到**：步骤 5（前后端连通，★ MVP 里程碑）—— 尚未开始
-- **已完成**：步骤 0（Git/GitHub）、步骤 1（环境）、步骤 2（Spring Boot 空项目）、步骤 3（第一个 API + MockMvc 测试）、步骤 4（Leaflet 地图页）
+- **进行到**：步骤 6（数据库 + 部署上线）—— 尚未开始
+- **已完成**：步骤 0–5 全部完成。**★ MVP 达成**：输入电影名 → 地图出取景地标记（数据仍是写死的假数据）
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,7 +31,8 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 5：前端 `fetch('/api/locations?movie=xxx')`，循环生成 marker；CORS 按环境精确配置（不用 `@CrossOrigin("*")`）
+- [ ] 小优化：重复搜索时先清除旧 marker（存进数组，逐个 `map.removeLayer`）
+- [ ] 步骤 6：PostgreSQL + Spring Data JPA + Testcontainers + Docker + CI + 部署 Render/Railway
 - [ ] README 里的架构草图待补（手画拍照即可）
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
 
@@ -80,3 +81,9 @@
 - IDE 升级：申请 JetBrains Educational Pack（免费，至 2027-07），换用 IntelliJ IDEA Ultimate。
 - 补基础方向确定：计算机网络只补应用层子集（HTTP → URL/端口 → DNS → TCP/UDP → HTTPS），资源《图解 HTTP》+ MDN。
 - **下一步**：步骤 5（★ MVP 里程碑），前端 fetch 后端 API、循环打点，处理 CORS。
+
+### 2026-07-12（第 4 天）★ MVP 达成
+- 完成步骤 5（本人手敲）：删写死 marker，改为 `fetch` 后端 API + `response.json()` + 循环打点；加 input/button，`addEventListener('click')` 触发搜索。
+- 概念课：fetch 与地址栏请求的区别（页面跳转 vs 后台拿数据）、任何程序都能发 HTTP 请求（客户端/服务器是角色不是身份）、`async/await`、模板字符串 `` `${}` ``、DOM（`document.getElementById`）、事件监听（JS 箭头函数 ≈ Java lambda）、CORS 与同源策略（本项目同源故未触发，面试话术已备进 PROJECT_PLAN 备注）。
+- 踩坑：URL `movie = xxx` 带空格导致参数名错；函数定义了没调用；误跑测试类当启动应用（测试断言完即退出、不监听端口）→ 学会区分跑测试 vs 跑应用、认 `Started ...` 日志、F12 排查三步法（连接拒绝→404→Console）。
+- **下一步**：先做小优化（清旧 marker），然后步骤 6：PostgreSQL + JPA + Testcontainers + Docker + CI + 上线。
