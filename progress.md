@@ -31,8 +31,8 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 小优化：重复搜索时先清除旧 marker（存进数组，逐个 `map.removeLayer`）
 - [ ] 步骤 6：PostgreSQL + Spring Data JPA + Testcontainers + Docker + CI + 部署 Render/Railway
+- [ ] JS 基础自学（zh.javascript.info 前几章 + async/DOM 小节，时间盒 3–5 小时）
 - [ ] README 里的架构草图待补（手画拍照即可）
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
 
@@ -87,3 +87,9 @@
 - 概念课：fetch 与地址栏请求的区别（页面跳转 vs 后台拿数据）、任何程序都能发 HTTP 请求（客户端/服务器是角色不是身份）、`async/await`、模板字符串 `` `${}` ``、DOM（`document.getElementById`）、事件监听（JS 箭头函数 ≈ Java lambda）、CORS 与同源策略（本项目同源故未触发，面试话术已备进 PROJECT_PLAN 备注）。
 - 踩坑：URL `movie = xxx` 带空格导致参数名错；函数定义了没调用；误跑测试类当启动应用（测试断言完即退出、不监听端口）→ 学会区分跑测试 vs 跑应用、认 `Started ...` 日志、F12 排查三步法（连接拒绝→404→Console）。
 - **下一步**：先做小优化（清旧 marker），然后步骤 6：PostgreSQL + JPA + Testcontainers + Docker + CI + 上线。
+
+### 2026-07-15（第 5 天）
+- 完成"清旧 marker"优化：`markers` 数组登记图钉，`loadLocations` 开头 `removeLayer` 清场；Controller 临时按 movie 参数返回不同数据验证通过。
+- 概念课：顶层代码只跑一次 vs 事件驱动（前后端对称）、数组存引用（同一对象才能精确摘除）、`console.log` + F12 Console 调试、改 Java 要重启 / 改静态文件要 ⌘F9 rebuild / 页面状态刷新即清零。
+- 决定补 JS 基础：范围锁定 6 项（let/const、对象与数组、函数、常用操作、async/fetch、DOM 三件事），资源 zh.javascript.info。
+- **下一步**：步骤 6。可考虑先加 spring-boot-devtools 改善开发体验。

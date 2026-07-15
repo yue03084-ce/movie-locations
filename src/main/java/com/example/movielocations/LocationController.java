@@ -13,6 +13,9 @@ public class LocationController {
 
     @GetMapping("/api/locations") // 告诉 Spring 这个路径的 GET 请求归这个方法管
     public List<Location> getLocations(@RequestParam String movie){
+        if(movie.equals("god father")){
+            return List.of(new Location("西西里", 37.8, 14.2));
+        }
         return List.of(
                 new Location("东京柏悦酒店", 35.6852, 139.6900),
                 new Location("涩谷十字路口", 35.6595, 139.7004)
