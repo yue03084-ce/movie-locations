@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * 刚才你验证接口的方式是：启动应用 → 开浏览器 → 肉眼看 JSON。测试就是把这套人工检查写成代码，
- * 以后每次改代码跑一下 mvn test，几秒钟自动验证所有接口没被改坏。
+ * 以后每次改代码跑一下 mvn test，几秒钟自动验证所有接口（一个可访问的URL）没被改坏。
  */
 @WebMvcTest(LocationController.class)
 public class LocationControllerTest {
