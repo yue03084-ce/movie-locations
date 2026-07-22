@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **进行到**：步骤 6 后半程。**下次第一件事**：Testcontainers 集成测试
-- **已完成**：步骤 0–5（★ MVP）；步骤 6 数据库部分**全部完成**——端到端真数据跑通（搜索 → 查库 → 地图自动定位），测试全绿
+- **进行到**：步骤 6 收尾。**下次第一件事**：GitHub Actions CI（`.github/workflows/` 配置文件），然后部署 Render/Railway
+- **已完成**：步骤 0–5（★ MVP）；步骤 6 已完成：数据库端到端、Testcontainers 集成测试、Dockerfile（容器运行验证通过）。只剩 CI + 部署
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,7 +31,7 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 6 剩余：① Testcontainers 集成测试 ② Dockerfile + GitHub Actions ③ 部署 Render/Railway
+- [ ] 步骤 6 剩余：① GitHub Actions CI ② 部署 Render/Railway
 - [ ] 小改进：查询忽略大小写（`findByMovieIgnoreCase`，自己试）
 - [ ] JS 基础自学（zh.javascript.info 前几章 + async/DOM 小节，时间盒 3–5 小时）
 - [ ] README 里的架构草图待补（手画拍照即可）
@@ -109,4 +109,10 @@
 - 修复被 Controller 改造弄红的单元测试：`@MockitoBean` 假 Repository + `when/thenReturn` 排练返回值；理解 mock 的意义（单元测试隔离依赖、精确控制场景 vs 集成测试来真的）。
 - 概念课：Spring 启动扫描登记机制（Found N 的含义）、Repository 实现每次启动内存重生成、数组套数组（坐标对集合）、选项对象参数、`@MockBean → @MockitoBean` 更名。
 - **里程碑**：搜索 → Postgres → JSON → 地图自动定位，全链路真数据，测试全绿。
-- **下次开工**：Testcontainers 集成测试 → Docker/CI → 部署。
+
+### 2026-07-22（第 7 天·续）Testcontainers + Dockerfile
+- 装 Docker Desktop，`docker run hello-world` 验证；概念课：镜像 vs 容器（类 vs 对象）、Docker Hub（≈ Maven 中央仓库）、"本地缓存→未命中→中央仓库"通用模型。
+- Testcontainers：三个 test 依赖 + `LocationRepositoryIT`（@SpringBootTest 全上下文 + @ServiceConnection 自动接线 postgres:16 临时容器），首跑拉镜像后通过。理解两层测试分工：ControllerTest 管 HTTP→JSON（mock 数据层），IT 管 Repository→真库（实体映射/派生查询/data.sql，列举了它能抓 mock 抓不到的 bug 清单）。
+- Dockerfile：多阶段构建 + .dockerignore（进 Git，"配方进 Git、产物不进"）；`docker build -t movie-locations .` + `docker run -p 8080:8080 -e SPRING_DATASOURCE_URL=...host.docker.internal...` 容器运行全功能验证通过。
+- 关键概念：容器内 localhost ≠ 宿主机、环境变量覆盖 properties（部署标准姿势）、层缓存与 COPY 顺序、multi-stage 瘦身、容器内 PID 1 与 UTC 时区（日志识别技巧）。
+- **下次开工**：GitHub Actions（push 自动构建+测试，Testcontainers 在 CI 可跑）→ 部署 Render/Railway → 步骤 6 收官。
