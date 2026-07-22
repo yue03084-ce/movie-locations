@@ -8,8 +8,8 @@
 
 ## 当前状态
 
-- **进行到**：步骤 6 进行中（数据库部分过半）。**下次第一件事**：Controller 构造器注入 Repository、删假数据改 `repository.findByMovie(movie)`，重启后访问 `/api/locations?movie=xxx` 应返回 `[]`（空表）
-- **已完成**：步骤 0–5（★ MVP 已达成）；步骤 6 已完成：Postgres 安装建库、JPA 依赖与配置、Location 实体（自动建表已验证）、LocationRepository
+- **进行到**：步骤 6 后半程。**下次第一件事**：Testcontainers 集成测试
+- **已完成**：步骤 0–5（★ MVP）；步骤 6 数据库部分**全部完成**——端到端真数据跑通（搜索 → 查库 → 地图自动定位），测试全绿
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,8 +31,8 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 6 剩余：① Controller 改查库（进行中）② data.sql 种子数据（2–3 部电影、十来行）③ Testcontainers ④ Dockerfile + GitHub Actions ⑤ 部署 Render/Railway
-- [ ] 旧的 LocationControllerTest 会因 Controller 改造而需调整（@WebMvcTest 需 mock Repository）——改完 Controller 记得跑一下测试看是否红
+- [ ] 步骤 6 剩余：① Testcontainers 集成测试 ② Dockerfile + GitHub Actions ③ 部署 Render/Railway
+- [ ] 小改进：查询忽略大小写（`findByMovieIgnoreCase`，自己试）
 - [ ] JS 基础自学（zh.javascript.info 前几章 + async/DOM 小节，时间盒 3–5 小时）
 - [ ] README 里的架构草图待补（手画拍照即可）
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
@@ -102,3 +102,11 @@
 - JPA：pom 加 data-jpa + postgresql 驱动；application.properties 配 datasource（本机默认系统用户名免密）+ `ddl-auto=update` + `show-sql=true`；手敲 `Location` 实体，启动后 Hibernate 自动建表（psql `\d location` 验证：五列 + 主键）；手敲 `LocationRepository` 接口，日志确认 `Found 1 JPA repository interfaces`。
 - 概念课：数据库是独立常驻服务器（主机:端口定位，与 8080 同构）、"手动操作一次性 vs 代码可复现"、ORM/JPA/Hibernate/Spring Data 关系、实体映射与无参构造器（record 不可用作实体）、方法名派生查询与运行时动态生成实现类、分层架构（Controller 管 HTTP / Repository 管数据，画了请求旅程图）、构造器注入优于字段注入（已讲，待实操）。
 - **下次开工**：Controller 注入 Repository 改真查库 → data.sql 种子数据 → Testcontainers → Docker/CI → 部署。
+
+### 2026-07-22（第 7 天）数据库端到端跑通
+- Controller 构造器注入 Repository，删假数据改 `findByMovie`；建 `data.sql`（DELETE + 7 条真实取景地 INSERT，注意 SQL 单引号转义 `''`），加 defer-datasource-initialization / sql.init.mode 两行配置解决"表未建就跑 SQL"时序问题。
+- 前端 `fitBounds` + padding 自动定位视野（用户体验问题由本人发现）。
+- 修复被 Controller 改造弄红的单元测试：`@MockitoBean` 假 Repository + `when/thenReturn` 排练返回值；理解 mock 的意义（单元测试隔离依赖、精确控制场景 vs 集成测试来真的）。
+- 概念课：Spring 启动扫描登记机制（Found N 的含义）、Repository 实现每次启动内存重生成、数组套数组（坐标对集合）、选项对象参数、`@MockBean → @MockitoBean` 更名。
+- **里程碑**：搜索 → Postgres → JSON → 地图自动定位，全链路真数据，测试全绿。
+- **下次开工**：Testcontainers 集成测试 → Docker/CI → 部署。

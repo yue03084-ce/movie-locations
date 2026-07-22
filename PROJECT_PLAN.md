@@ -97,7 +97,7 @@
   - **Dockerfile + GitHub Actions**（push 自动跑测试）+ 部署到 Render/Railway 免费档。
   - API key、数据库密码走环境变量，**绝不进代码库**。
 - **完成 Milestone**：删掉写死数据后 API 仍能查库返回；任何人打开公网 URL 能用；CI 全绿。
-- **备注**：进行中（2026-07-21）。已完成：Homebrew + PostgreSQL 16 安装（brew services 常驻）、建库 movielocations、pom 加 data-jpa + postgresql 依赖、datasource 配置（含 show-sql）、`Location` 实体（@Entity/@Id/@GeneratedValue，无参构造器，不能用 record）、Hibernate 自动建表验证（psql `\d location`）、`LocationRepository`（JpaRepository + findByMovie 方法名派生查询，启动日志 Found 1）。**下次继续**：① Controller 构造器注入 Repository 改真查库（代码已给，待手敲验证）② data.sql 种子数据 ③ Testcontainers ④ Docker + CI ⑤ 部署。
+- **备注**：进行中（2026-07-21）。已完成：Homebrew + PostgreSQL 16 安装（brew services 常驻）、建库 movielocations、pom 加 data-jpa + postgresql 依赖、datasource 配置（含 show-sql）、`Location` 实体（@Entity/@Id/@GeneratedValue，无参构造器，不能用 record）、Hibernate 自动建表验证（psql `\d location`）、`LocationRepository`（JpaRepository + findByMovie 方法名派生查询，启动日志 Found 1）。已完成（2026-07-22）：Controller 构造器注入改真查库；data.sql 种子数据（3 部电影 7 个真实取景地，DELETE+INSERT 可重复执行，配 defer-datasource-initialization + sql.init.mode=always 解决时序）；前端 fitBounds 自动定位视野；旧单元测试改 @MockitoBean mock Repository（Spring Boot 3.5 中 @MockBean 已改名），全绿。**剩余**：① Testcontainers 集成测试 ② Dockerfile + GitHub Actions ③ 部署 Render/Railway。已知待办：查询精确匹配大小写敏感（findByMovieIgnoreCase 可解）。
 
 ### 步骤 7 — LLM 抽取 + 交叉验证管线（★ 深度亮点一）  `[ ]`（第 4–7 周，重点投入）
 - **要实现的东西**：输入库里没有的新电影，系统自动抽取取景地、验证、打分、入库。
