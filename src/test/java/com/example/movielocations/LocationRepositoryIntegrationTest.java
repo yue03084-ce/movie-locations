@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @SpringBootTest
-class LocationRepositoryIT {
+class LocationRepositoryIntegrationTest {
 
     @Container
     @ServiceConnection
