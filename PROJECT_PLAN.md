@@ -89,7 +89,7 @@
 - **完成 Milestone**：输入/选择电影 → 地图自动出现取景地标记。第一个可演示版本完成。
 - **备注**：已完成（2026-07-12，本人手敲）。前端 `async/await + fetch` 相对路径调 API，`for...of` 循环打 marker；input + button + `addEventListener` 触发搜索。**CORS 实际未触发**：前端由 Spring static/ 服务，与 API 同源——这是 MVP 的最简方案，面试话术已备（分离部署时用配置类精确放行 origin，拒绝 `@CrossOrigin("*")`）。踩坑：URL 查询参数 `=` 两边不能有空格；函数定义后忘记调用；跑成测试类导致 8080 无人监听（ERR_CONNECTION_REFUSED）。遗留小项"清旧 marker"已于 2026-07-15 完成（markers 数组 + removeLayer）。
 
-### 步骤 6 — 接数据库 + 部署上线  `[~]`（第 3–4 周）
+### 步骤 6 — 接数据库 + 部署上线  `[x]`（第 3–4 周）
 - **要实现的东西**：数据入库 + **live demo 上线**。一个能点开的链接比多做两个功能重要。
 - **技术细节**：
   - PostgreSQL + Spring Data JPA（Location 实体、Repository），手动录入一批真实取景地。
@@ -97,7 +97,9 @@
   - **Dockerfile + GitHub Actions**（push 自动跑测试）+ 部署到 Render/Railway 免费档。
   - API key、数据库密码走环境变量，**绝不进代码库**。
 - **完成 Milestone**：删掉写死数据后 API 仍能查库返回；任何人打开公网 URL 能用；CI 全绿。
-- **备注**：进行中（2026-07-21）。已完成：Homebrew + PostgreSQL 16 安装（brew services 常驻）、建库 movielocations、pom 加 data-jpa + postgresql 依赖、datasource 配置（含 show-sql）、`Location` 实体（@Entity/@Id/@GeneratedValue，无参构造器，不能用 record）、Hibernate 自动建表验证（psql `\d location`）、`LocationRepository`（JpaRepository + findByMovie 方法名派生查询，启动日志 Found 1）。已完成（2026-07-22）：Controller 构造器注入改真查库；data.sql 种子数据（3 部电影 7 个真实取景地，DELETE+INSERT 可重复执行，配 defer-datasource-initialization + sql.init.mode=always 解决时序）；前端 fitBounds 自动定位视野；旧单元测试改 @MockitoBean mock Repository（Spring Boot 3.5 中 @MockBean 已改名），全绿。Testcontainers 已完成（2026-07-22）：装 Docker Desktop；加 spring-boot-testcontainers / testcontainers-postgresql / junit-jupiter 三依赖；`LocationRepositoryIT`（@SpringBootTest + @Container + @ServiceConnection 自动接线临时 postgres:16 容器），验证实体映射 + 派生查询 + data.sql 全链路，通过。Dockerfile 已完成（同日）：多阶段构建（maven:3.9-temurin-17 build → temurin:17-jre run，层缓存优化 COPY 顺序，-DskipTests 因容器内无法套娃跑 Testcontainers）+ .dockerignore；容器运行验证通过（-p 8080:8080 端口映射；容器内 localhost 指容器自身，用 host.docker.internal 访问宿主机 Postgres；SPRING_DATASOURCE_URL 环境变量覆盖配置——部署即靠此机制）。**剩余**：① GitHub Actions CI ② 部署 Render/Railway。已知待办：查询大小写敏感（findByMovieIgnoreCase 可解）。
+- **备注**：进行中（2026-07-21）。已完成：Homebrew + PostgreSQL 16 安装（brew services 常驻）、建库 movielocations、pom 加 data-jpa + postgresql 依赖、datasource 配置（含 show-sql）、`Location` 实体（@Entity/@Id/@GeneratedValue，无参构造器，不能用 record）、Hibernate 自动建表验证（psql `\d location`）、`LocationRepository`（JpaRepository + findByMovie 方法名派生查询，启动日志 Found 1）。已完成（2026-07-22）：Controller 构造器注入改真查库；data.sql 种子数据（3 部电影 7 个真实取景地，DELETE+INSERT 可重复执行，配 defer-datasource-initialization + sql.init.mode=always 解决时序）；前端 fitBounds 自动定位视野；旧单元测试改 @MockitoBean mock Repository（Spring Boot 3.5 中 @MockBean 已改名），全绿。Testcontainers 已完成（2026-07-22）：装 Docker Desktop；加 spring-boot-testcontainers / testcontainers-postgresql / junit-jupiter 三依赖；`LocationRepositoryIT`（@SpringBootTest + @Container + @ServiceConnection 自动接线临时 postgres:16 容器），验证实体映射 + 派生查询 + data.sql 全链路，通过。Dockerfile 已完成（同日）：多阶段构建（maven:3.9-temurin-17 build → temurin:17-jre run，层缓存优化 COPY 顺序，-DskipTests 因容器内无法套娃跑 Testcontainers）+ .dockerignore；容器运行验证通过（-p 8080:8080 端口映射；容器内 localhost 指容器自身，用 host.docker.internal 访问宿主机 Postgres；SPRING_DATASOURCE_URL 环境变量覆盖配置——部署即靠此机制）。CI 已完成（2026-07-24）：`.github/workflows/ci.yml`（push/PR 触发，ubuntu runner，setup-java + `./mvnw test`，Testcontainers 在 CI 正常起容器）。首跑红了两次，修复过程有价值：① 删 `MovieLocationsApplicationTests`（依赖"环境里恰好有 Postgres"，CI 上暴露）② `LocationRepositoryIT` 改名 `LocationRepositoryIntegrationTest`——surefire 默认不跑 `*IT` 命名，此前 `mvnw test` 从未跑过集成测试（CI 揪出的盲区）。原则：测试要么自带依赖（Testcontainers）要么隔离依赖（mock）。
+部署已完成（2026-07-24）：Neon 免费云 Postgres（悉尼，Render 自家免费库 30 天删库故弃用）+ Render Web Service（新加坡，Free 档，Docker 构建，GitHub App 仅授权本仓库）。`server.port=${PORT:8080}` 适配平台端口注入；三条 SPRING_DATASOURCE_* 环境变量注入连接信息（密码零入库）。**公网 live demo 已可访问**。注意事项：免费档 15 分钟空闲休眠，冷启动约 1 分钟，演示前先预热。
+**⚠️ 步骤 7 前必须处理**：data.sql 每次启动 DELETE+INSERT，会清掉未来管线写入的数据——需改为"空表才种子"或移除 DELETE。已知待办：查询大小写敏感（findByMovieIgnoreCase 可解）。
 
 ### 步骤 7 — LLM 抽取 + 交叉验证管线（★ 深度亮点一）  `[ ]`（第 4–7 周，重点投入）
 - **要实现的东西**：输入库里没有的新电影，系统自动抽取取景地、验证、打分、入库。

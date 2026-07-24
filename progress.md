@@ -8,8 +8,9 @@
 
 ## 当前状态
 
-- **进行到**：步骤 6 收尾。**下次第一件事**：GitHub Actions CI（`.github/workflows/` 配置文件），然后部署 Render/Railway
-- **已完成**：步骤 0–5（★ MVP）；步骤 6 已完成：数据库端到端、Testcontainers 集成测试、Dockerfile（容器运行验证通过）。只剩 CI + 部署
+- **进行到**：★★ **步骤 6 全部收官（2026-07-24），live demo 上线** ★★。下一步：步骤 7（LLM 抽取管线，项目核心亮点）
+- **步骤 7 开工前置**：① 修 data.sql 重启清数据问题（见待办）② TMDB API key 申请、Wikidata P915 调研 ③ 建议先做 findByMovieIgnoreCase 热身
+- **已完成**：步骤 0–6 全部。技术栈已落地：Spring Boot + JPA/Postgres + Leaflet + Testcontainers + Docker + GitHub Actions CI + Render/Neon 云部署
 - **MVP 目标**：完成到步骤 5（前后端连通），时间盒 2–3 周
 - **协作模式约定**：简单基础的代码本人手敲、Claude 讲概念；脚手架和后期大量代码可让 Claude 直接写
 
@@ -31,9 +32,11 @@
 
 ## 未解决的问题 / 待办
 
-- [ ] 步骤 6 剩余：① GitHub Actions CI ② 部署 Render/Railway
+- [ ] **步骤 7 前必修**：data.sql 每次启动 DELETE+INSERT，会清掉管线未来写入的数据 → 改"空表才种子"（如 CommandLineRunner + count()==0 判断）或移除 DELETE
+- [ ] README 更新：加 live demo 链接、CI 徽章、冷启动说明、架构图
 - [ ] 小改进：查询忽略大小写（`findByMovieIgnoreCase`，自己试）
 - [ ] JS 基础自学（zh.javascript.info 前几章 + async/DOM 小节，时间盒 3–5 小时）
+- [ ] 步骤 7 调研：TMDB API key、Wikidata P915 用法、LLM API 选型
 - [ ] README 里的架构草图待补（手画拍照即可）
 - [ ] （远期）步骤 7 需要的数据源账号：TMDB API key、Wikidata/Nominatim 用法调研
 
@@ -116,3 +119,10 @@
 - Dockerfile：多阶段构建 + .dockerignore（进 Git，"配方进 Git、产物不进"）；`docker build -t movie-locations .` + `docker run -p 8080:8080 -e SPRING_DATASOURCE_URL=...host.docker.internal...` 容器运行全功能验证通过。
 - 关键概念：容器内 localhost ≠ 宿主机、环境变量覆盖 properties（部署标准姿势）、层缓存与 COPY 顺序、multi-stage 瘦身、容器内 PID 1 与 UTC 时区（日志识别技巧）。
 - **下次开工**：GitHub Actions（push 自动构建+测试，Testcontainers 在 CI 可跑）→ 部署 Render/Railway → 步骤 6 收官。
+
+### 2026-07-24（第 8 天）CI + 部署，步骤 6 收官 ★★
+- CI：`.github/workflows/ci.yml`。首跑红 → 排查出两个真问题：ApplicationTests 依赖本机恰好开着的 Postgres（删）；surefire 不认 `*IT` 命名导致集成测试从未被 mvnw test 执行（改名 LocationRepositoryIntegrationTest）。三次运行 红→绿→绿，"CI 在干净环境暴露本机侥幸"的活案例。
+- 部署：Neon（悉尼）+ Render（新加坡 Free/Docker）。`server.port=${PORT:8080}`；JDBC url 手拼（通用格式 vs JDBC 格式的历史差异）；环境变量注入三条连接信息；GitHub App 最小权限授权。**live demo 上线成功**。
+- 概念课：GitLab CI（课上用过）与 GitHub Actions 同构对照、Failure vs Error、云上启动流程逐帧还原（Render 只是搬运工，建表灌数据是应用自己启动时干的）、免费档休眠与冷启动、ORM 三件套如何咬合（实体=映射说明书 / data.sql=绕过 ORM 直灌 / Repository=靠说明书生成 SQL，靠"同一张表+一致命名"粘合）。
+- 发现隐患并记入待办：data.sql 无条件 DELETE+INSERT，步骤 7 前必须改。
+- **下次开工**：修 data.sql 隐患 + README 补 demo 链接 → 开步骤 7（LLM 抽取管线）。
