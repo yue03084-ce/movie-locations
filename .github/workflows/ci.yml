@@ -1,0 +1,22 @@
+name: CI                          # 工作流名字,显示在 GitHub 页面上
+
+on:                               # 触发条件
+  push:
+    branches: [ main ]            # push 到 main 时
+  pull_request:
+    branches: [ main ]            # 有 PR 指向 main 时(以后协作/规范用,先放着)
+
+jobs:
+  build-and-test:                 # 任务名
+    runs-on: ubuntu-latest        # 用 GitHub 的 Ubuntu 虚拟机
+
+    steps:
+      - uses: actions/checkout@v4          # 步骤1:把你的仓库代码拉到这台虚拟机
+
+      - uses: actions/setup-java@v4        # 步骤2:装 JDK
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven                     # 缓存依赖,下次跑得快
+
+      - run: ./mvnw test                   # 步骤3:跑全部测试
